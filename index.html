@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Calculator</title>
+    <style>
+        .calculator {
+            width: 450px;
+        }
+        input {
+            box-sizing: border-box;
+            width: 100%;
+            margin-bottom: 10px;
+            outline: none;
+            font-size: 1.75em;
+        }
+        .numbers {
+            display: grid;
+            grid-gap: 5px;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            grid-auto-rows: 75px;
+        }
+        .numbers > * {
+            font-size: 1.75em;
+        }
+        #equal {
+            grid-column-start: 3;
+            grid-column-end: 5;
+        }
+        #reset, #zero {
+            grid-column-start: 1;
+            grid-column-end: 3;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <input type="text" id="result" dire readonly/>
+        <div class="numbers">
+            <button onclick="addChar(this.innerText)" id="reset">C</button>
+            <button onclick="addChar(this.innerText)" id="equal">=</button>
+            <button onclick="addChar(this.innerText)">1</button>
+            <button onclick="addChar(this.innerText)">2</button>
+            <button onclick="addChar(this.innerText)">3</button>
+            <button onclick="addChar(this.innerText)">+</button>
+            <button onclick="addChar(this.innerText)">4</button>
+            <button onclick="addChar(this.innerText)">5</button>
+            <button onclick="addChar(this.innerText)">6</button>
+            <button onclick="addChar(this.innerText)">-</button>
+            <button onclick="addChar(this.innerText)">7</button>
+            <button onclick="addChar(this.innerText)">8</button>
+            <button onclick="addChar(this.innerText)">9</button>
+            <button onclick="addChar(this.innerText)">*</button>
+            <button onclick="addChar(this.innerText)" id="zero">0</button>
+            <button onclick="addChar(this.innerText)">.</button>
+            <button onclick="addChar(this.innerText)">/</button>
+        </div>
+    </div>
+</body>
+<script>
+    var result = document.getElementById('result');
+    var number = null;
+    var operation = null;
+    function addChar(char) {
+        switch (char) {
+            case 'C':
+                result.value = '';
+                number = null;
+                operation = null;
+                break;
+            case '=':
+                if (number != null && operation != null)
+                {
+                    number = operate(number, operation, parseFloat(result.value.split(/\+|\-|\*|\//)[1]));
+                    operation = null;
+                    result.value = number;
+                }
+                break;
+            case '+': case '-': case '*': case '/':
+                if (number != null && operation != null)
+                {
+                    number = operate(number, operation, parseFloat(result.value.split(/\+|\-|\*|\//)[1]));
+                    result.value = number;
+                }
+                number = parseFloat(result.value);
+                operation = char;
+                result.value += char;
+                break;
+            default:
+                result.value += char;
+                break;
+        }
+    }
+    function operate(n1, o, n2) {
+        switch (o) {
+            case '+': return n1 + n2;
+            case '-': return n1 - n2;
+            case '*': return n1 * n2;
+            case '/': return n1 / n2;
+            default: return null;
+        }
+    }
+</script>
+</html>
